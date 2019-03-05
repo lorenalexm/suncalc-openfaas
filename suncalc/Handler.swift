@@ -8,10 +8,10 @@ struct Coordinate: Codable {
 
 struct Sun: Codable {
 	let atCoordinate: Coordinate
-	let rise: Date?
-	let set: Date?
-	let goldenHourBegin: Date?
-	let goldenHourEnd: Date?
+	let rise: String
+	let set: String
+	let goldenHourBegin: String
+	let goldenHourEnd: String
 }
 
 class Handler {
