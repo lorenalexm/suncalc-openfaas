@@ -1,18 +1,24 @@
 import Foundation
-struct SunData: Codable {
-	var latitude: Double?
-	var longitude: Double?
-	var date: Date?
-	var sunrise: Date?
-	var sunset: Date?
-	var goldenHourBegin: Date?
-	var goldenHourEnd: Date?
+import Sunlight
+
+struct Coordinate: Codable {
+	let longitude: Double
+	let latitude: Double
+}
+
+struct Sun: Codable {
+	let atCoordinate: Coordinate?
+	let onDate: Date?
+	let rise: Date?
+	let set: Date?
+	let goldenHourBegin: Date?
+	let goldenHourEnd: Date?
 }
 
 class Handler {
 	func process(with args: String) -> String {
 		return "Success"
-	func validate(latitude: Double, longitude: Double) -> Bool {
-		return (latitude < 90 && latitude > -90) && (longitude < 180 && longitude > -180)
+	func validate(_ coord: Coordinate) -> Bool {
+		return (coord.latitude < 90 && coord.latitude > -90) && (coord.longitude < 180 && coord.longitude > -180)
 	}
 }
