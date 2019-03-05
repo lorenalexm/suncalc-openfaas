@@ -41,6 +41,17 @@ class Handler {
 	func validate(_ coord: Coordinate) -> Bool {
 		return (coord.latitude <= 90 && coord.latitude >= -90) && (coord.longitude <= 180 && coord.longitude >= -180)
 	}
+
+	func calculateSunAt(_ coord: Coordinate) -> Sun {
+		let light = SunlightCalculator(latitude: coord.latitude, longitude: coord.longitude)
+		let rise = light.calculate(.dawn, twilight: .civil)?.iso8601 ?? "-1"
+		let set = light.calculate(.dusk, twilight: .civil)?.iso8601 ?? "-1"
+		let goldenHourBegin = light.calculate(.dusk, twilight: .custom(-4))?.iso8601 ?? "-1"
+		let goldenHourEnd = light.calculate(.dusk, twilight: .custom(6))?.iso8601 ?? "-1"
+		return Sun(atCoordinate: coord, rise: rise, set: set, goldenHourBegin: goldenHourBegin, goldenHourEnd: goldenHourEnd)
+	}
+}
+
 // ISO8601 Date Formatter Extensions
 // Source: https://stackoverflow.com/questions/28016578/how-to-create-a-date-time-stamp-and-format-as-iso-8601-rfc-3339-utc-time-zone#28016692
 extension ISO8601DateFormatter {
