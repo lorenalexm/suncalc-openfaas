@@ -1,6 +1,16 @@
 import Foundation
 import Sunlight
 
+struct Response: Codable {
+	let error: Error?
+	let sun: Sun?
+}
+
+struct Error: Codable {
+	let code: Int
+	let message: String
+}
+
 struct Coordinate: Codable {
 	let longitude: Double
 	let latitude: Double
@@ -25,21 +35,16 @@ struct Sun: Codable {
 class Handler {
 	func process(with args: String) -> String {
 		guard let json = args.data(using: .utf8) else {
-			return "Unable to extract data from string"
+			return responseStringWith(error: Error(code: 500, message: "Unable to extract data from string."), sun: nil)
 		}
 
 		if let coord = try? JSONDecoder().decode(Coordinate.self, from: json) {
 			if !validate(coord) {
-				return "Invalid coordinates received"
+				return responseStringWith(error: Error(code: 400, message: "Invalid coordinates received."), sun: nil)
 			}
-			let sun = calculateSunAt(coord)
-			if let data = try? JSONEncoder().encode(sun) {
-				return String(data: data, encoding: .utf8)!
-			} else {
-				return "Unable to encode response"
-			}
+			return responseStringWith(error: nil, sun: calculateSunAt(coord))
 		} else {
-			return "Unable to decode string"
+			return responseStringWith(error: Error(code: 500, message: "Unable to decode coordinate string."), sun: nil)
 		}
 	}
 
@@ -54,6 +59,15 @@ class Handler {
 		let goldenHourBegin = light.calculate(.dusk, twilight: .custom(-4))?.iso8601 ?? "-1"
 		let goldenHourEnd = light.calculate(.dusk, twilight: .custom(6))?.iso8601 ?? "-1"
 		return Sun(atCoordinate: coord, rise: rise, set: set, goldenHourBegin: goldenHourBegin, goldenHourEnd: goldenHourEnd)
+	}
+
+	func responseStringWith(error: Error?, sun: Sun?) -> String {
+		let response = Response(error: error, sun: sun)
+		if let data = try? JSONEncoder().encode(response) {
+			return String(data: data, encoding: .utf8)!
+		} else {
+			return "Unable to create response string"
+		}
 	}
 }
 
