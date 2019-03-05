@@ -32,6 +32,6 @@ class Handler {
 	}
 
 	func validate(_ coord: Coordinate) -> Bool {
-		return (coord.latitude < 90 && coord.latitude > -90) && (coord.longitude < 180 && coord.longitude > -180)
+		return (coord.latitude <= 90 && coord.latitude >= -90) && (coord.longitude <= 180 && coord.longitude >= -180)
 	}
 }
