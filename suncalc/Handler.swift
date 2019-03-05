@@ -12,6 +12,14 @@ struct Sun: Codable {
 	let set: String
 	let goldenHourBegin: String
 	let goldenHourEnd: String
+
+	enum CodingKeys: String, CodingKey {
+		case atCoordinate = "at_coordinate"
+		case rise
+		case set
+		case goldenHourBegin = "golden_hour_begin"
+		case goldenHourEnd = "golden_hour_end"
+	}
 }
 
 class Handler {
