@@ -32,7 +32,12 @@ class Handler {
 			if !validate(coord) {
 				return "Invalid coordinates received"
 			}
-			return "Successfully decoded coordinate"
+			let sun = calculateSunAt(coord)
+			if let data = try? JSONEncoder().encode(sun) {
+				return String(data: data, encoding: .utf8)!
+			} else {
+				return "Unable to encode response"
+			}
 		} else {
 			return "Unable to decode string"
 		}
