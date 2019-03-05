@@ -7,8 +7,7 @@ struct Coordinate: Codable {
 }
 
 struct Sun: Codable {
-	let atCoordinate: Coordinate?
-	let onDate: Date?
+	let atCoordinate: Coordinate
 	let rise: Date?
 	let set: Date?
 	let goldenHourBegin: Date?
