@@ -1,3 +1,14 @@
+import Foundation
+struct SunData: Codable {
+	var latitude: Double?
+	var longitude: Double?
+	var date: Date?
+	var sunrise: Date?
+	var sunset: Date?
+	var goldenHourBegin: Date?
+	var goldenHourEnd: Date?
+}
+
 class Handler {
 	func process(with args: String) -> String {
 		return "Success"
