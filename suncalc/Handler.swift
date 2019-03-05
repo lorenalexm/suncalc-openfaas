@@ -22,6 +22,7 @@ struct Sun: Codable {
 	let set: String
 	let goldenHourBegin: String
 	let goldenHourEnd: String
+	let serverTime: String
 
 	enum CodingKeys: String, CodingKey {
 		case atCoordinate = "at_coordinate"
@@ -29,6 +30,7 @@ struct Sun: Codable {
 		case set
 		case goldenHourBegin = "golden_hour_begin"
 		case goldenHourEnd = "golden_hour_end"
+		case serverTime = "server_time"
 	}
 }
 
@@ -58,7 +60,8 @@ class Handler {
 		let set = light.calculate(.dusk, twilight: .civil)?.iso8601 ?? "-1"
 		let goldenHourBegin = light.calculate(.dusk, twilight: .custom(-4))?.iso8601 ?? "-1"
 		let goldenHourEnd = light.calculate(.dusk, twilight: .custom(6))?.iso8601 ?? "-1"
-		return Sun(atCoordinate: coord, rise: rise, set: set, goldenHourBegin: goldenHourBegin, goldenHourEnd: goldenHourEnd)
+		let serverTime = Date().iso8601
+		return Sun(atCoordinate: coord, rise: rise, set: set, goldenHourBegin: goldenHourBegin, goldenHourEnd: goldenHourEnd, serverTime: serverTime)
 	}
 
 	func responseStringWith(error: Error?, sun: Sun?) -> String {
