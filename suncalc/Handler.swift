@@ -1,39 +1,6 @@
 import Foundation
 import Sunlight
 
-struct Response: Codable {
-	let error: Error?
-	let sun: Sun?
-}
-
-struct Error: Codable {
-	let code: Int
-	let message: String
-}
-
-struct Coordinate: Codable {
-	let longitude: Double
-	let latitude: Double
-}
-
-struct Sun: Codable {
-	let atCoordinate: Coordinate
-	let rise: String
-	let set: String
-	let goldenHourBegin: String
-	let goldenHourEnd: String
-	let serverTime: String
-
-	enum CodingKeys: String, CodingKey {
-		case atCoordinate = "at_coordinate"
-		case rise
-		case set
-		case goldenHourBegin = "golden_hour_begin"
-		case goldenHourEnd = "golden_hour_end"
-		case serverTime = "server_time"
-	}
-}
-
 class Handler {
 	func process(with args: String) -> String {
 		guard let json = args.data(using: .utf8) else {
@@ -72,24 +39,4 @@ class Handler {
 			return "Unable to create response string"
 		}
 	}
-}
-
-// ISO8601 Date Formatter Extensions
-// Source: https://stackoverflow.com/questions/28016578/how-to-create-a-date-time-stamp-and-format-as-iso-8601-rfc-3339-utc-time-zone#28016692
-extension ISO8601DateFormatter {
-  convenience init(_ formatOptions: Options, timeZone: TimeZone = TimeZone(secondsFromGMT: 0)!) {
-	  self.init()
-	  self.formatOptions = formatOptions
-	  self.timeZone = timeZone
-  }
-}
-
-extension Formatter {
-  static let iso8601 = ISO8601DateFormatter([.withInternetDateTime])
-}
-
-extension Date {
-  var iso8601: String {
-    return Formatter.iso8601.string(from: self)
-  }
 }
